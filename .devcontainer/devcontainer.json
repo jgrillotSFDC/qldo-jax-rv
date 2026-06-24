@@ -1,0 +1,47 @@
+{
+  "name": "qldo-jax-rv Salesforce Dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+
+  // Ensure the workspace is mounted at the expected path
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/qldo-jax-rv,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/qldo-jax-rv",
+
+  // Forward port used by sf for local org auth callback
+  "forwardPorts": [1717],
+
+  // Install npm dependencies and print tool versions to confirm the environment
+  "postCreateCommand": "npm install && echo '--- Environment check ---' && node --version && sf --version && sf plugins --core && java -version && gh --version",
+
+  // Use zsh as the default shell
+  "remoteUser": "vscode",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // Salesforce core pack (Apex, SOQL, LWC, etc.)
+        "salesforce.salesforcedx-vscode",
+        // Code Analyzer results viewer
+        "salesforce.sfdx-code-analyzer-vscode",
+        // Git & GitHub
+        "GitHub.vscode-pull-request-github",
+        "eamodio.gitlens",
+        // Quality of life
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "salesforcedx-vscode-apex.java.home": "/usr/lib/jvm/java-17-openjdk-aarch64",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[apex]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      }
+    }
+  }
+}
