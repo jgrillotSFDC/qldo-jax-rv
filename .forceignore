@@ -15,3 +15,4 @@ node_modules/
 
 # Org Specific Metadata
 **/profiles/**
+**/AppMenus/**
