@@ -1,3 +1,5 @@
+# This workflow validates a PR against the develop branch.
+# Installs all needed cli tools and runs the code analyzer and deployment validation.
 name: PR Validation
 
 on:
@@ -53,7 +55,8 @@ jobs:
 
       - name: Validate Deployment (Dry Run)
         run: |
-          sf project deploy validate \
+          sf project deploy start \
+            --dry-run \
             --manifest delta/package/package.xml \
             --target-org target-org \
             --test-level RunRelevantTests
