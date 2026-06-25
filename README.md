@@ -1,6 +1,11 @@
-# Salesforce DX Project: Next Steps
+# Jax RV Service Center
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+This is a sample project for Salesforce for an RV Service Center.
+
+# Development
+
+- Optionally use Dev Containers
+- Develop using Scratch orgs
 
 ## How Do You Plan to Deploy Your Changes?
 
