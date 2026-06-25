@@ -1,7 +1,7 @@
 {
   "orgName": "jgrillot company",
-  "edition": "Developer",
-  "features": ["EnableSetPasswordInApi"],
+  "edition": "Enterprise",
+  "features": ["PersonAccounts", "EnableSetPasswordInApi"],
   "settings": {
     "lightningExperienceSettings": {
       "enableS1DesktopEnabled": true
