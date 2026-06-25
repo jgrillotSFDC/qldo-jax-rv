@@ -1,0 +1,59 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    environment: CI
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Salesforce CLI
+        run: npm install -g @salesforce/cli
+
+      - name: Install SF Plugins
+        run: |
+          sf plugins install @salesforce/sfdx-scanner
+          echo 'y' | sf plugins install sfdx-git-delta
+
+      - name: Authenticate to Org
+        run: |
+          echo "${{ secrets.SFDX_URL }}" > sfdx-auth-url.txt
+          sf org login sfdx-url --sfdx-url-file sfdx-auth-url.txt --alias target-org --set-default
+          rm -f sfdx-auth-url.txt
+
+      - name: Generate Delta Package
+        run: |
+          mkdir -p delta
+          sf sgd source delta \
+            --to "${{ github.sha }}" \
+            --from "origin/${{ github.base_ref }}" \
+            --output delta \
+            --generate-delta
+
+      - name: Run Code Analyzer
+        run: |
+          sf code-analyzer run \
+            --workspace "delta/" \
+            --view table \
+            --severity-threshold 2
+
+      - name: Validate Deployment (Dry Run)
+        run: |
+          sf project deploy validate \
+            --manifest delta/package/package.xml \
+            --target-org target-org \
+            --test-level RunRelevantTests
