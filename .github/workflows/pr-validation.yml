@@ -43,7 +43,7 @@ jobs:
           sf sgd source delta \
             --to "${{ github.sha }}" \
             --from "origin/${{ github.base_ref }}" \
-            --output delta \
+            --output-dir delta \
             --generate-delta
 
       - name: Run Code Analyzer
